@@ -1,0 +1,21 @@
+# requirements.txt
+
+numpy
+pandas
+scikit-learn
+matplotlib
+
+# model training / saving
+xgboost
+tensorflow
+joblib
+
+# streamlit app
+streamlit
+
+# data fetching (.env + API)
+requests
+python-dotenv
+
+# map/coord transform (지도 탭 쓸 때)
+pyproj
