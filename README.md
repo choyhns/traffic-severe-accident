@@ -1,61 +1,71 @@
 # 교통사고 중대사고 예측 (Machine Learning)
 
-교통사고 데이터를 이용해 **중대사고 여부**를 예측하는 머신러닝 프로젝트입니다. Streamlit 웹 앱으로 모델 학습·평가·예측을 수행할 수 있습니다.
+교통사고 데이터를 활용해 **중대사고(중상·사망) 발생 여부**를 예측하는 머신러닝 프로젝트입니다.  
+단순 정확도(Accuracy)가 아닌, **중대사고를 놓치지 않는 탐지 성능(Recall/F1)**에 초점을 맞춰 모델을 설계·평가했습니다.  
+분석 전 과정을 **Streamlit 웹 앱**으로 구현하여 데이터 탐색부터 모델 학습·평가·예측까지 한 번에 수행할 수 있습니다.
+
+---
+
+## TL;DR
+- **문제 정의**: 사고 발생 시점의 조건만으로 중대사고 발생 가능성 예측
+- **핵심 설계**: 사고 이후 정보 제거 → **Data Leakage 방지**
+- **모델**: Logistic Regression / Random Forest / XGBoost 비교
+- **평가 기준**: Accuracy 대신 **Recall · F1 · AUC**
+- **결론**: 중대사고 탐지 성능이 가장 안정적인 **XGBoost** 선택
+- **결과물**: Streamlit 대시보드(성능 비교·해석·예측)
+
+---
+
+## Model Comparison (Recall / F1 / AUC)
+![Model Comparison](images/model_comparison.png)
+
+> Accuracy 대신 Recall·F1·AUC 기준으로 모델을 비교하여,  
+> **중대사고(중상·사망)를 놓치지 않는 성능**이 가장 안정적인 모델을 선택했습니다.
+
+---
+
+## Confusion Matrix
+![Confusion Matrix](images/confusion_matrix.png)
+
+> 단순 정확도보다 **중대사고를 놓치지 않는 것(Recall)**에 초점을 두어  
+> 실제 안전 정책 문제에 적합한 성능을 검증했습니다.
+
+---
+
+## Feature Importance
+![Feature Importance](images/feature_importance.png)
+
+> 법규위반 유형, 사고유형, 도로 형태 등 주요 요인이  
+> 중대사고 발생 가능성에 어떻게 기여하는지 모델 해석을 통해 확인했습니다.
+
+---
+
+## Streamlit Dashboard
+![Streamlit Overview](images/streamlit_overview.png)
+
+> 데이터 탐색부터 모델 학습·평가·예측까지  
+> 전체 분석 흐름을 웹 인터페이스로 구현했습니다.
+
+---
 
 ## 주요 기능
+- **데이터 전처리**: 23·24년 교통사고 CSV 정제 및 피처 엔지니어링
+- **모델링**: 이진 분류(LR, RF, XGBoost)
+- **평가**: Recall / F1 / AUC, Confusion Matrix
+- **해석**: Feature Importance 기반 설명 가능성 확보
+- **시각화**: Streamlit 대시보드
 
-- **데이터**: 교통사고 원본 CSV (23년·24년) 전처리 및 피처 엔지니어링
-- **모델**: Logistic Regression, Random Forest, XGBoost 등 이진 분류
-- **Streamlit 앱**: 데이터 탐색, 모델 학습/재학습, Feature Importance, 지도 시각화(선택)
+---
 
 ## 환경 요구사항
-
 - Python 3.10+
-- Windows에서 한글 시각화: **Malgun Gothic** 폰트 (기본 설치)
+- Windows 한글 시각화: Malgun Gothic 폰트
+
+---
 
 ## 설치 및 실행
-
 ```bash
-# 가상환경 생성 및 활성화
 python -m venv .venv
-# Windows
-.venv\Scripts\activate
-# macOS/Linux
-# source .venv/bin/activate
-
-# 의존성 설치
+.venv\Scripts\activate   # Windows
 pip install -r requirements.txt
-
-# Streamlit 앱 실행
 streamlit run app.py
-```
-
-브라우저에서 `http://localhost:8501` 접속
-
-## 프로젝트 구조
-
-```
-traffic-severe-accident(ML)/
-├── app.py              # Streamlit 메인 앱
-├── requirements.txt
-├── data/
-│   └── raw/            # 사고분석-23년.csv, 사고분석-24년.csv
-├── models/
-│   └── best_model.pkl  # 저장된 최적 모델 (학습 후 생성)
-└── src/
-    ├── config.py       # 경로·타겟·컬럼 설정
-    ├── io.py           # 데이터 로드
-    ├── preprocess.py   # 전처리
-    ├── features.py     # 피처/요약 테이블
-    ├── models.py       # 모델 빌더 (LR, RF, XGB)
-    └── evaluate.py    # 이진 분류 평가
-```
-
-## 데이터
-
-- `data/raw/` 에 **사고분석-23년.csv**, **사고분석-24년.csv** 를 두고 사용
-- 인코딩 문제 시 `convert_encoding.py` 로 UTF-8 변환 가능
-
-## 라이선스
-
-프로젝트용·학습용으로 자유롭게 사용 가능합니다.
